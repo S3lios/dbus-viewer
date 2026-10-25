@@ -51,7 +51,7 @@ jobs:
           name="dbus-viewer-${{ steps.version.outputs.tag }}-linux-x86_64"
           mkdir "$name"
           install -s build/dbus-viewer "$name/"
-          cp README.md "$name/"
+          cp README.md LICENSE "$name/"
           tar -czf "$name.tar.gz" "$name"
           echo "ARCHIVE=$name.tar.gz" >> "$GITHUB_ENV"
 

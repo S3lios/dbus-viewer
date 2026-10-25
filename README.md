@@ -73,3 +73,12 @@ and is reported by `dbus-viewer --version`.
   Its own traffic is hidden from the views.
 - Introspection only targets object paths a service was seen using, and is
   sent with auto-start disabled so that it never activates a service.
+
+## License
+
+Copyright (C) 2026 Mathurin Mael
+
+dbus-viewer is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version. See [LICENSE](LICENSE) for the full text.
