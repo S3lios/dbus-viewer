@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+# Two quick pushes must not race to create the same tag.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read version
+        id: version
+        run: |
+          version=$(.github/scripts/project-version.sh CMakeLists.txt)
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          if git rev-parse -q --verify "refs/tags/v$version" > /dev/null; then
+            echo "Tag v$version already exists: nothing to release."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install dependencies
+        if: steps.version.outputs.exists != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            cmake ninja-build pkg-config g++-14 \
+            libsystemd-dev libncurses-dev dbus-daemon
+
+      - name: Build and test
+        if: steps.version.outputs.exists != 'true'
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++-14
+          cmake --build build
+          ctest --test-dir build --output-on-failure
+
+      - name: Package
+        if: steps.version.outputs.exists != 'true'
+        run: |
+          name="dbus-viewer-${{ steps.version.outputs.tag }}-linux-x86_64"
+          mkdir "$name"
+          install -s build/dbus-viewer "$name/"
+          cp README.md "$name/"
+          tar -czf "$name.tar.gz" "$name"
+          echo "ARCHIVE=$name.tar.gz" >> "$GITHUB_ENV"
+
+      - name: Publish release
+        if: steps.version.outputs.exists != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "${{ steps.version.outputs.tag }}" "$ARCHIVE"
+          --target "$GITHUB_SHA"
+          --title "${{ steps.version.outputs.tag }}"
+          --generate-notes

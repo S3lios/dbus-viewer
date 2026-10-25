@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build and test (${{ matrix.compiler.name }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - { name: gcc-14, cxx: g++-14 }
+          - { name: clang-18, cxx: clang++-18 }
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            cmake ninja-build pkg-config g++-14 clang-18 \
+            libsystemd-dev libncurses-dev dbus-daemon
+
+      - name: Configure
+        run: >
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }}
+          -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Smoke test
+        run: ./build/dbus-viewer --version
+
+  version-bump:
+    name: Version bumped
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compare with main
+        run: |
+          base=$(git show "origin/${{ github.base_ref }}:CMakeLists.txt" | .github/scripts/project-version.sh)
+          head=$(.github/scripts/project-version.sh CMakeLists.txt)
+          echo "main: $base, this PR: $head"
+          highest=$(printf '%s\n%s\n' "$base" "$head" | sort -V | tail -n1)
+          if [[ "$head" == "$base" || "$highest" != "$head" ]]; then
+            echo "::error file=CMakeLists.txt::Bump project(dbus-viewer VERSION ...) above $base (currently $head)."
+            exit 1
+          fi

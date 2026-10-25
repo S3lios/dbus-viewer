@@ -38,6 +38,29 @@ the stream filtered on it.
 Other keys: `/` filter, `Esc` clear filter, `p` pause, `c` clear, `s` sort
 (Members), `d` hide disconnected (Services), `?` help, `q` quit.
 
+## Tests
+
+```sh
+ctest --test-dir build --output-on-failure
+```
+
+Unit tests cover option parsing, introspection XML, text layout, rates and
+list navigation. Integration tests run under `dbus-run-session`, which starts
+a private bus: they check capture, reply attribution and match rules against
+a real daemon. Catch2 is downloaded at configure time unless installed;
+pass `-DBUILD_TESTING=OFF` to skip the tests entirely.
+
+## Versioning and releases
+
+The version lives in `project(dbus-viewer VERSION x.y.z)` in `CMakeLists.txt`
+and is reported by `dbus-viewer --version`.
+
+- CI builds and tests every push and pull request on `main` and `dev`, with
+  GCC and Clang.
+- A pull request to `main` fails unless it raises the version.
+- Each push to `main` whose version has no tag yet creates the `vX.Y.Z` tag
+  and a GitHub release with the Linux x86-64 binary and generated notes.
+
 ## How it works
 
 - A first connection calls `org.freedesktop.DBus.Monitoring.BecomeMonitor`
