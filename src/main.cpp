@@ -13,6 +13,10 @@ int main(int argc, char** argv) {
         std::println(stderr, "dbus-viewer: {}\n\n{}", options.error(), usage(args[0]));
         return 2;
     }
+    if (options->showVersion) {
+        std::println("dbus-viewer {}", DBUS_VIEWER_VERSION);
+        return 0;
+    }
     if (options->showHelp) {
         std::print("{}", usage(args[0]));
         return 0;

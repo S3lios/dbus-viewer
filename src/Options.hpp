@@ -15,6 +15,7 @@ struct Options {
     std::vector<std::string> matchRules;
     std::size_t maxMessages = 20'000;
     bool showHelp = false;
+    bool showVersion = false;
 };
 
 std::expected<Options, std::string> parseOptions(std::span<char* const> args);

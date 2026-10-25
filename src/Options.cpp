@@ -27,6 +27,8 @@ std::expected<Options, std::string> parseOptions(std::span<char* const> args) {
 
         if (arg == "-h" || arg == "--help") {
             options.showHelp = true;
+        } else if (arg == "-V" || arg == "--version") {
+            options.showVersion = true;
         } else if (arg == "--system" || arg == "-s") {
             options.bus = BusKind::system;
         } else if (arg == "--session" || arg == "--user") {
@@ -71,6 +73,7 @@ std::string usage(std::string_view programName) {
                        "\"type='signal',interface='org.foo.Bar'\"\n"
                        "  -n, --max-messages N  Number of messages kept in history (default "
                        "20000)\n"
+                       "  -V, --version         Show the version\n"
                        "  -h, --help            Show this help\n",
                        programName);
 }
