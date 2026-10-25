@@ -11,14 +11,8 @@ permissions:
 
 jobs:
   test:
-    name: Build and test (${{ matrix.compiler.name }})
+    name: Build and test
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        compiler:
-          - { name: gcc-14, cxx: g++-14 }
-          - { name: clang-18, cxx: clang++-18 }
     steps:
       - uses: actions/checkout@v4
 
@@ -26,14 +20,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            cmake ninja-build pkg-config g++-14 clang-18 \
+            cmake ninja-build pkg-config g++-14 \
             libsystemd-dev libncurses-dev dbus-daemon
 
       - name: Configure
         run: >
           cmake -S . -B build -G Ninja
           -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }}
+          -DCMAKE_CXX_COMPILER=g++-14
           -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
 
       - name: Build

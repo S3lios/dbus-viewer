@@ -56,7 +56,7 @@ The version lives in `project(dbus-viewer VERSION x.y.z)` in `CMakeLists.txt`
 and is reported by `dbus-viewer --version`.
 
 - CI builds and tests every push and pull request on `main` and `dev`, with
-  GCC and Clang.
+  GCC.
 - A pull request to `main` fails unless it raises the version.
 - Each push to `main` whose version has no tag yet creates the `vX.Y.Z` tag
   and a GitHub release with the Linux x86-64 binary and generated notes.
