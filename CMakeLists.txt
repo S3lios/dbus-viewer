@@ -48,3 +48,8 @@ add_executable(dbus-viewer src/main.cpp)
 target_link_libraries(dbus-viewer PRIVATE dbus-viewer-core dbus-viewer-warnings)
 
 install(TARGETS dbus-viewer)
+
+include(CTest)
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
