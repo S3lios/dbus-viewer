@@ -18,9 +18,7 @@ public:
     StreamView(const MessageStore& store, const ViewFilter& filter, OpenMessage onOpen);
 
     std::string_view name() const override { return "Stream"; }
-    std::string_view hints() const override {
-        return "↑↓ move  Enter details  End follow";
-    }
+    std::string_view hints() const override { return "↑↓ move  Enter details  End follow"; }
     void draw(const Rect& area) override;
     bool handleKey(int key) override;
 

@@ -29,7 +29,8 @@ struct MessageRecord {
     std::string errorName;
     std::string argsSummary;
 
-    // Filled by MessageStore: "interface.member", resolved through reply cookies for returns/errors.
+    // Filled by MessageStore: "interface.member", resolved through reply cookies for
+    // returns/errors.
     std::string memberKey;
     // Unique names the message was attributed to (well-known names resolved at reception time).
     std::string senderService;

@@ -62,11 +62,8 @@ std::string utf8Pop(std::string text) {
 } // namespace
 
 App::App(Options options, BusPtr client, BusPtr monitor)
-    : options_{std::move(options)},
-      client_{std::move(client)},
-      monitor_{std::move(monitor)},
-      store_{options_.maxMessages, names_},
-      introspector_{client_.get()},
+    : options_{std::move(options)}, client_{std::move(client)}, monitor_{std::move(monitor)},
+      store_{options_.maxMessages, names_}, introspector_{client_.get()},
       streamView_{store_, filter_, [this](std::uint64_t id) { openMessage(id); }},
       memberView_{store_, filter_, [this](const std::string& key) { openMember(key); }},
       serviceView_{store_, names_, introspector_, filter_,
@@ -114,7 +111,8 @@ int App::run() {
         if (!running_) break;
         std::array<pollfd, 3> fds{{
             {STDIN_FILENO, POLLIN, 0},
-            {sd_bus_get_fd(monitor_.get()), static_cast<short>(sd_bus_get_events(monitor_.get())), 0},
+            {sd_bus_get_fd(monitor_.get()), static_cast<short>(sd_bus_get_events(monitor_.get())),
+             0},
             {sd_bus_get_fd(client_.get()), static_cast<short>(sd_bus_get_events(client_.get())), 0},
         }};
         if (poll(fds.data(), fds.size(), pollTimeoutMs(moreWork)) < 0 && errno != EINTR) {
@@ -134,7 +132,8 @@ int App::pollTimeoutMs(bool moreWork) const {
     const auto now = steady_clock::now();
     auto deadline = lastDraw_ + (dirty_ ? redrawInterval : idleRedrawInterval);
 
-    // sd-bus timeouts are absolute CLOCK_MONOTONIC values, which is what steady_clock uses on Linux.
+    // sd-bus timeouts are absolute CLOCK_MONOTONIC values, which is what steady_clock uses on
+    // Linux.
     for (sd_bus* bus : {monitor_.get(), client_.get()}) {
         std::uint64_t usec = 0;
         if (sd_bus_get_timeout(bus, &usec) > 0 && usec != UINT64_MAX)
@@ -340,7 +339,7 @@ void App::drawTitleBar(int width) {
     ui::fillLine(0, 0, width, title);
 
     const auto rules = options_.matchRules.size();
-    const auto filtering = rules == 0 ? std::string{}
+    const auto filtering = rules == 0   ? std::string{}
                            : rules == 1 ? std::string{" (1 match rule)"}
                                         : std::format(" ({} match rules)", rules);
     int x = ui::drawText(0, 0, width,
@@ -382,7 +381,8 @@ void App::drawFooter(int y, int width) {
     std::string text;
     if (!filter_.empty()) {
         text += " Filter:";
-        if (!filter_.service.empty()) text += std::format(" service={}", names_.label(filter_.service));
+        if (!filter_.service.empty())
+            text += std::format(" service={}", names_.label(filter_.service));
         if (!filter_.memberKey.empty()) text += std::format(" member={}", filter_.memberKey);
         if (!filter_.text.empty()) text += std::format(" \"{}\"", filter_.text);
         text += " (Esc clears) │";

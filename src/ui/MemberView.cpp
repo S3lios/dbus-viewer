@@ -54,8 +54,8 @@ void MemberView::rebuildRows() {
     case SortMode::name: break; // std::map order
     }
 
-    const auto selected = std::ranges::find(rows_, selectedKey_,
-                                            [](const Row& row) { return row.first; });
+    const auto selected =
+        std::ranges::find(rows_, selectedKey_, [](const Row& row) { return row.first; });
     if (selected != rows_.end())
         cursor_.selected = static_cast<std::size_t>(selected - rows_.begin());
     cursor_.clamp(rows_.size(), visibleRows_);

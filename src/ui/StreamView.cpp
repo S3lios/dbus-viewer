@@ -28,15 +28,16 @@ Columns layoutColumns(int width) {
 }
 
 std::string routeOf(const MessageRecord& record) {
-    const auto& destination = record.destinationLabel.empty() ? std::string{"*"}
-                                                               : record.destinationLabel;
+    const auto& destination =
+        record.destinationLabel.empty() ? std::string{"*"} : record.destinationLabel;
     return std::format("{} → {}", record.senderLabel, destination);
 }
 
 std::string detailsOf(const MessageRecord& record) {
     if (record.type == MessageType::error)
-        return record.argsSummary.empty() ? record.errorName
-                                          : std::format("{}: {}", record.errorName, record.argsSummary);
+        return record.argsSummary.empty()
+                   ? record.errorName
+                   : std::format("{}: {}", record.errorName, record.argsSummary);
     return record.argsSummary;
 }
 
@@ -104,7 +105,8 @@ void StreamView::draw(const Rect& area) {
     }
 }
 
-void StreamView::drawRow(int y, const Rect& area, const MessageRecord& record, bool selected) const {
+void StreamView::drawRow(int y, const Rect& area, const MessageRecord& record,
+                         bool selected) const {
     const auto columns = layoutColumns(area.width);
     const attr_t base = selected ? A_REVERSE : A_NORMAL;
     if (selected) fillLine(y, area.x, area.width, base);

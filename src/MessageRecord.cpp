@@ -154,8 +154,8 @@ MessageRecord makeRecord(sd_bus_message* message) {
     record.type = typeOf(message);
     sd_bus_message_get_cookie(message, &record.cookie);
     sd_bus_message_get_reply_cookie(message, &record.replyCookie);
-    record.expectsReply = record.type == MessageType::methodCall &&
-                          sd_bus_message_get_expect_reply(message) > 0;
+    record.expectsReply =
+        record.type == MessageType::methodCall && sd_bus_message_get_expect_reply(message) > 0;
 
     record.sender = safeString(sd_bus_message_get_sender(message));
     record.destination = safeString(sd_bus_message_get_destination(message));

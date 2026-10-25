@@ -44,8 +44,8 @@ MessageStore::MessageStore(std::size_t capacity, const NameRegistry& names)
 const MessageRecord& MessageStore::add(MessageRecord record) {
     record.id = nextId_++;
     record.senderService = names_.resolve(record.sender);
-    record.destinationService = record.destination.empty() ? std::string{}
-                                                           : names_.resolve(record.destination);
+    record.destinationService =
+        record.destination.empty() ? std::string{} : names_.resolve(record.destination);
     record.senderLabel = record.sender.empty() ? std::string{} : names_.label(record.senderService);
     record.destinationLabel =
         record.destination.empty() ? std::string{} : names_.label(record.destinationService);

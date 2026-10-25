@@ -71,12 +71,12 @@ void TextOverlay::draw(const Rect& screen) {
 
     drawText(box.y, box.x + 2, box.width - 4, std::format(" {} ", title_),
              colorAttr(accentColor) | A_BOLD);
-    const auto position = std::format(" {}/{}  ↑↓ ←→ scroll  q/Esc close ",
-                                      std::min(scroll_ + visibleRows_, lines_.size()),
-                                      lines_.size());
+    const auto position =
+        std::format(" {}/{}  ↑↓ ←→ scroll  q/Esc close ",
+                    std::min(scroll_ + visibleRows_, lines_.size()), lines_.size());
     const int positionWidth = displayWidth(position);
-    drawText(box.y + box.height - 1, box.x + box.width - 2 - positionWidth, positionWidth,
-             position, A_DIM);
+    drawText(box.y + box.height - 1, box.x + box.width - 2 - positionWidth, positionWidth, position,
+             A_DIM);
 
     for (int row = 0; row < visibleRows_; ++row) {
         const auto index = scroll_ + static_cast<std::size_t>(row);

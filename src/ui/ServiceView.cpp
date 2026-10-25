@@ -100,8 +100,8 @@ void ServiceView::addService(const std::string& service, const ServiceStats& sta
 
     if (!row.expanded) return;
     addMemberGroup(id + "/sent", "Sent (as sender)", stats.sent, stats.sentTotal, service);
-    addMemberGroup(id + "/recv", "Received (as destination)", stats.received,
-                   stats.receivedTotal, service);
+    addMemberGroup(id + "/recv", "Received (as destination)", stats.received, stats.receivedTotal,
+                   service);
     addInterfaces(id + "/if", service, stats);
 }
 
@@ -124,8 +124,8 @@ void ServiceView::addMemberGroup(const std::string& parentId, std::string_view t
     for (const auto& [typedKeyPtr, stats] : sorted) {
         const auto& typedKey = *typedKeyPtr;
         const auto& [type, memberKey] = typedKey;
-        auto& leaf = addRow(std::format("{}/{}:{}", parentId, shortTypeName(type), memberKey), 2,
-                            false);
+        auto& leaf =
+            addRow(std::format("{}/{}:{}", parentId, shortTypeName(type), memberKey), 2, false);
         leaf.service = service;
         leaf.memberKey = memberKey;
         leaf.segments.push_back({fitWidth(shortTypeName(type), 5), typeAttr(type)});
@@ -173,10 +173,10 @@ void ServiceView::addInterfaces(const std::string& parentId, const std::string& 
 
         auto& node = addRow(interfaceId, 2, true);
         node.segments.push_back({interface, A_BOLD});
-        node.segments.push_back({std::format("  {} methods, {} signals, {} properties",
-                                             info.methods.size(), info.signals.size(),
-                                             info.properties.size()),
-                                 A_DIM});
+        node.segments.push_back(
+            {std::format("  {} methods, {} signals, {} properties", info.methods.size(),
+                         info.signals.size(), info.properties.size()),
+             A_DIM});
         if (usedCount > 0)
             node.segments.push_back(
                 {std::format("  ● {} used", usedCount), colorAttr(returnColor)});

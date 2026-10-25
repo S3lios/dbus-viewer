@@ -59,8 +59,7 @@ void Introspector::request(const std::string& service, const std::set<std::strin
 
         sd_bus_message* raw = nullptr;
         if (sd_bus_message_new_method_call(client_, &raw, service.c_str(), path.c_str(),
-                                           "org.freedesktop.DBus.Introspectable",
-                                           "Introspect") < 0)
+                                           "org.freedesktop.DBus.Introspectable", "Introspect") < 0)
             continue;
         MessagePtr message{raw};
         // Never start a service just because we looked at it.

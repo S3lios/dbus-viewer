@@ -18,9 +18,7 @@ public:
     MemberView(const MessageStore& store, const ViewFilter& filter, OpenMember onOpen);
 
     std::string_view name() const override { return "Members"; }
-    std::string_view hints() const override {
-        return "↑↓ move  Enter show messages  s sort";
-    }
+    std::string_view hints() const override { return "↑↓ move  Enter show messages  s sort"; }
     void draw(const Rect& area) override;
     bool handleKey(int key) override;
 

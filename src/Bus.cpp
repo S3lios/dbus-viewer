@@ -58,10 +58,9 @@ std::expected<BusPtr, std::string> openMonitorBus(const std::string& address,
     if (!bus) return bus;
 
     sd_bus_message* raw = nullptr;
-    if (const int r = sd_bus_message_new_method_call(bus->get(), &raw, busDaemonName,
-                                                     "/org/freedesktop/DBus",
-                                                     "org.freedesktop.DBus.Monitoring",
-                                                     "BecomeMonitor");
+    if (const int r =
+            sd_bus_message_new_method_call(bus->get(), &raw, busDaemonName, "/org/freedesktop/DBus",
+                                           "org.freedesktop.DBus.Monitoring", "BecomeMonitor");
         r < 0)
         return std::unexpected(errnoMessage("cannot build BecomeMonitor call", r));
     MessagePtr call{raw};
