@@ -1,5 +1,8 @@
 # dbus-viewer
 
+[![CI](https://github.com/S3lios/dbus-viewer/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/S3lios/dbus-viewer/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/S3lios/dbus-viewer?sort=semver)](https://github.com/S3lios/dbus-viewer/releases/latest)
+
 Interactive terminal monitor for D-Bus messages, written in C++23 on top of
 `sd-bus` (libsystemd) and `ncursesw`.
 
