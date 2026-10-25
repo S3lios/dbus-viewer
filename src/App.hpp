@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Bus.hpp"
+#include "Capture.hpp"
 #include "Introspector.hpp"
 #include "MessageStore.hpp"
 #include "NameRegistry.hpp"
@@ -26,7 +27,6 @@ public:
 private:
     bool processBuses();
     void handleMonitorMessage(sd_bus_message* message);
-    void trackNameOwnerChange(sd_bus_message* message);
     static int onNameOwnerChanged(sd_bus_message* message, void* userdata, sd_bus_error* error);
 
     void handleKey(int key);
@@ -45,14 +45,12 @@ private:
     Options options_;
     BusPtr client_;
     BusPtr monitor_;
-    std::string clientName_;
-    std::string monitorName_;
-    bool monitoring_ = false;
     // Match rules may exclude NameOwnerChanged from the monitor, so the client follows it too.
     SlotPtr nameOwnerWatch_;
 
     NameRegistry names_;
     MessageStore store_;
+    Capture capture_;
     Introspector introspector_;
     ui::ViewFilter filter_;
 

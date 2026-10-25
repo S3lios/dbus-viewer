@@ -21,6 +21,7 @@ add_executable(dbus-viewer
   src/MessageRecord.cpp
   src/NameRegistry.cpp
   src/MessageStore.cpp
+  src/Capture.cpp
   src/Introspector.cpp
   src/App.cpp
   src/ui/Terminal.cpp
